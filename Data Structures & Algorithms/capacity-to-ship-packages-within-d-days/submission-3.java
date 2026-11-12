@@ -1,0 +1,45 @@
+class Solution {
+    public int shipWithinDays(int[] weights, int days) {
+        int left = weights[0];
+        int right = 0;
+
+        for (int weight : weights) {
+            if (weight > left) {
+                left = weight;
+            }
+            right += weight;
+        }
+
+
+        int result = right;
+        while (left < right) {
+            int middle = left + (right - left) / 2;
+
+            int minDay = 1;
+            int sum = 0;
+            for (int weight : weights) {
+                if(weight + sum > middle){
+                    minDay++;
+                    sum = weight;
+                    
+                    continue;
+                }
+
+                sum += weight;
+            }
+
+            if(minDay <= days){
+                result = middle;
+                right = middle;
+            }else{
+                left = middle + 1;
+            }
+        }
+
+        return result;
+    }
+}
+
+// use binary search to find min result
+// start with middle of min and max weight
+// if middle pass, then move max to middle and start again
